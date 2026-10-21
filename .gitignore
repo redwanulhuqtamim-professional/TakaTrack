@@ -1,0 +1,15 @@
+# Environments & Secrets
+.env
+.env.local
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Frontend
+node_modules/
+dist/
+
+# Database & OS
+postgres_data/
+.DS_Store
