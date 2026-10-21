@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../services/api';
-import { Calendar, Plus, AlertCircle } from 'lucide-react';
+import { Plus, Calendar } from 'lucide-react';
 
 export const DashboardPage: React.FC = () => {
   const [selectedMonth, setSelectedMonth] = useState<any>(null);
