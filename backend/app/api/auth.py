@@ -75,6 +75,8 @@ def register_user(payload: RegisterRequest, response: Response, db: Session = De
     user = db.scalar(select(User).options(joinedload(User.settings)).where(User.id == user.id))
     token = create_access_token(user.id)
     set_auth_cookie(response, token)
+    response.headers["X-Access-Token"] = token
+    response.headers["Access-Control-Expose-Headers"] = "X-Access-Token"
     return user
 
 
@@ -95,6 +97,8 @@ def login_user(payload: LoginRequest, request: Request, response: Response, db: 
 
     token = create_access_token(user.id)
     set_auth_cookie(response, token)
+    response.headers["X-Access-Token"] = token
+    response.headers["Access-Control-Expose-Headers"] = "X-Access-Token"
     return user
 
 
