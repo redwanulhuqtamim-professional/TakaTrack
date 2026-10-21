@@ -37,8 +37,4 @@ TakaTrack is a full-stack personal finance manager tailored for people living in
 
 ---
 
-## 🚀 Running Locally on Apple Silicon (M-Series Mac)
-
-### 1. Start PostgreSQL 16
-```bash
-brew services start postgresql@16
+## URL :https://takatrack-frontend-1.onrender.com
