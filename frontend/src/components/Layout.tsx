@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import {
@@ -12,12 +12,15 @@ import {
   Settings,
   LogOut,
   Wallet,
+  Menu,
+  X,
 } from 'lucide-react';
 
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = async () => {
     await logout();
@@ -36,17 +39,37 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
-      <aside className="w-64 bg-slate-900 text-slate-300 hidden md:flex flex-col justify-between border-r border-slate-800">
+    <div className="min-h-screen bg-slate-50 flex relative">
+      {/* Mobile Backdrop Overlay */}
+      {mobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* Sidebar / Mobile Drawer */}
+      <aside className={`
+        fixed md:static inset-y-0 left-0 z-50 w-64 bg-slate-900 text-slate-300 flex flex-col justify-between border-r border-slate-800 transform transition-transform duration-200 ease-in-out
+        ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+      `}>
         <div>
-          <div className="p-6 flex items-center space-x-3 border-b border-slate-800">
-            <div className="bg-emerald-600 p-2 rounded-xl text-white">
-              <Wallet className="w-6 h-6" />
+          <div className="p-6 flex items-center justify-between border-b border-slate-800">
+            <div className="flex items-center space-x-3">
+              <div className="bg-emerald-600 p-2 rounded-xl text-white">
+                <Wallet className="w-6 h-6" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-white tracking-wide">TakaTrack</h1>
+                <p className="text-xs text-emerald-400 font-medium">Bangladesh Finance Manager</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-xl font-bold text-white tracking-wide">TakaTrack</h1>
-              <p className="text-xs text-emerald-400 font-medium">Bangladesh Finance Manager</p>
-            </div>
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              className="p-1 text-slate-400 hover:text-white md:hidden"
+            >
+              <X className="w-5 h-5" />
+            </button>
           </div>
           <nav className="p-4 space-y-1">
             {navItems.map((item) => {
@@ -56,6 +79,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 <Link
                   key={item.path}
                   to={item.path}
+                  onClick={() => setMobileMenuOpen(false)}
                   className={`flex items-center space-x-3 px-4 py-2.5 rounded-xl font-medium transition-colors text-sm ${
                     isActive
                       ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-900/20'
@@ -85,13 +109,22 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         </div>
       </aside>
 
+      {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="bg-white border-b border-slate-200 h-16 px-6 flex items-center justify-between md:justify-end">
-          <div className="flex items-center space-x-3 md:hidden">
-            <div className="bg-emerald-600 p-2 rounded-xl text-white">
-              <Wallet className="w-5 h-5" />
+        <header className="bg-white border-b border-slate-200 h-16 px-6 flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 -ml-2 text-slate-600 hover:text-slate-900 md:hidden focus:outline-none"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+            <div className="flex items-center space-x-3 md:hidden">
+              <div className="bg-emerald-600 p-2 rounded-xl text-white">
+                <Wallet className="w-5 h-5" />
+              </div>
+              <span className="font-bold text-slate-900 text-lg">TakaTrack</span>
             </div>
-            <span className="font-bold text-slate-900 text-lg">TakaTrack</span>
           </div>
           <div className="flex items-center space-x-4">
             <span className="text-sm font-medium text-slate-600 hidden sm:inline">
